@@ -12,9 +12,12 @@ export class GameSagas {
   gameCreated = (events$: Observable<any>): Observable<ICommand> => {
     return events$.pipe(
       ofType(GameCreatedEvent),
-      mergeMap((event) => of(
-        new CreatePlayerCommand(event.gameId, event.whiteImage),
-        new CreatePlayerCommand(event.gameId, event.blackImage)
-    )));
+      mergeMap((event) =>
+        of(
+          new CreatePlayerCommand(event.gameId, event.whiteImage),
+          new CreatePlayerCommand(event.gameId, event.blackImage),
+        ),
+      ),
+    );
   };
 }

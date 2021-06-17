@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 export interface RunOptions {
   command?: string[];
   env?: string[];
-  labels?: { [key: string]: string }
+  labels?: { [key: string]: string };
 }
 
 @Injectable()

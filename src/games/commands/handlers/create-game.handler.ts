@@ -16,6 +16,6 @@ export class CreateGameHandler implements ICommandHandler<CreateGameCommand> {
     const game = this.publisher.mergeObjectContext(
       await this.repository.create(id, white, black),
     );
-    game.publish(new GameCreatedEvent(id, white, black))
+    game.publish(new GameCreatedEvent(id, white, black));
   }
 }
