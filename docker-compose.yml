@@ -11,3 +11,7 @@ services:
     image: redis:6-alpine
     ports:
       - 6379:6379
+  nats:
+    image: nats:2-alpine
+    ports:
+      - 4222:4222

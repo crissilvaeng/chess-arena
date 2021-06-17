@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { HealthCheck, HealthCheckService, MicroserviceHealthIndicator } from '@nestjs/terminus';
-import { RedisOptions, Transport } from '@nestjs/microservices';
+import { NatsOptions, RedisOptions, Transport } from '@nestjs/microservices';
 
 import { ConfigService } from '@nestjs/config';
 import { DockerHealthIndicator } from 'src/docker/docker.health';
@@ -24,6 +24,13 @@ export class HealthController {
         transport: Transport.REDIS,
         options: {
           url: this.config.get<string>('REDIS_URL'),
+        },
+      }),
+      async () =>
+      this.microservice.pingCheck<NatsOptions>('nats', {
+        transport: Transport.NATS,
+        options: {
+          url: this.config.get<string>('NATS_URL'),
         },
       }),
     ]);
