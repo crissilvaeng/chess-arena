@@ -7,3 +7,7 @@ services:
       - 3000:3000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+  redis:
+    image: redis:6-alpine
+    ports:
+      - 6379:6379
