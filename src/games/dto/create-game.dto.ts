@@ -2,7 +2,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateGame {
+export class CreateGameDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ example: 'username/engine:tag' })

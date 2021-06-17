@@ -1,15 +1,17 @@
-import { CreateGame } from './dto/create-game.dto';
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { Game, GameDocument } from './schemas/game.schema';
+
+import { CommandBus } from '@nestjs/cqrs';
+import { CreateGameCommand } from './commands/create-game.command';
+import { CreateGameDto } from './dto/create-game.dto';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class GamesService {
-  constructor(@InjectModel(Game.name) private gameModel: Model<GameDocument>) {}
+  constructor(private readonly commandBus: CommandBus) {}
 
-  async create(createGame: CreateGame) {
-    const game = new this.gameModel(createGame);
-    return game.save();
+  async createGame(gameId: string, createGameDto: CreateGameDto) {
+    return this.commandBus.execute(
+      new CreateGameCommand(gameId, createGameDto.white, createGameDto.black),
+    );
   }
 }

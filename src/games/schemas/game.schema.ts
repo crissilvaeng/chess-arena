@@ -4,13 +4,11 @@ import { nanoid } from 'nanoid';
 
 export type GameDocument = Game & Document;
 
-@Schema({
-  id: true,
-})
+@Schema()
 export class Game {
+
   @Prop({
-    type: String,
-    default: () => nanoid(),
+    type: String
   })
   _id: string;
 
