@@ -3,6 +3,7 @@ import {
   HealthCheck,
   HealthCheckService,
   MicroserviceHealthIndicator,
+  MongooseHealthIndicator,
 } from '@nestjs/terminus';
 import {
   NatsOptions,
@@ -20,6 +21,7 @@ export class HealthController {
     private readonly config: ConfigService,
     private readonly health: HealthCheckService,
     private readonly docker: DockerHealthIndicator,
+    private readonly mongoose: MongooseHealthIndicator,
     private readonly microservice: MicroserviceHealthIndicator,
   ) {}
 
@@ -28,6 +30,7 @@ export class HealthController {
   check() {
     return this.health.check([
       async () => this.docker.ping('docker'),
+      async () => this.mongoose.pingCheck('mongo'),
       async () =>
         this.microservice.pingCheck<NatsOptions>('nats', {
           transport: Transport.NATS,
