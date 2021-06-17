@@ -26,3 +26,11 @@ services:
     image: rabbitmq:3-alpine
     ports:
       - 5672:5672
+  dozzle:
+    image: amir20/dozzle:latest
+    environment:
+      DOZZLE_NO_ANALYTICS: "true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 9999:8080

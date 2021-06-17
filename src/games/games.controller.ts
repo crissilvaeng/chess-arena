@@ -11,6 +11,6 @@ export class GamesController {
   async create(@Body() createGameDto: CreateGameDto) {
     const gameId = nanoid();
     await this.gamesService.createGame(gameId, createGameDto);
-    return { game: gameId }
+    return { game: gameId };
   }
 }

@@ -6,9 +6,8 @@ export type GameDocument = Game & Document;
 
 @Schema()
 export class Game {
-
   @Prop({
-    type: String
+    type: String,
   })
   _id: string;
 
