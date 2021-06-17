@@ -11,9 +11,9 @@ export class CreateGameHandler implements ICommandHandler<CreateGameCommand> {
   ) {}
 
   async execute(command: CreateGameCommand) {
-    const { gane, white, black } = command;
+    const { game: id, white, black } = command;
     const game = this.publisher.mergeObjectContext(
-      await this.repository.create(gane, white, black),
+      await this.repository.create(id, white, black),
     );
     game.commit();
   }
