@@ -13,6 +13,6 @@ import { Module } from '@nestjs/common';
     DockerService,
     DockerHealthIndicator,
   ],
-  exports: [DockerHealthIndicator],
+  exports: [DockerHealthIndicator, DockerService],
 })
 export class DockerModule {}

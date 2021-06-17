@@ -1,14 +1,13 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { DockerModule } from './docker/docker.module';
+import { GamesModule } from './games/games.module';
 import { HealthModule } from './health/health.module';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    HealthModule,
-    DockerModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -20,6 +19,9 @@ import { MongooseModule } from '@nestjs/mongoose';
       }),
       inject: [ConfigService],
     }),
+    HealthModule,
+    DockerModule,
+    GamesModule,
   ],
   controllers: [],
   providers: [],

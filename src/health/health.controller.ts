@@ -12,6 +12,7 @@ import {
   Transport,
 } from '@nestjs/microservices';
 
+import { ApiExcludeEndpoint } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { DockerHealthIndicator } from 'src/docker/docker.health';
 
@@ -27,6 +28,7 @@ export class HealthController {
 
   @Get()
   @HealthCheck()
+  @ApiExcludeEndpoint()
   check() {
     return this.health.check([
       async () => this.docker.ping('docker'),

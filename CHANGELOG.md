@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/crissilvaeng/chess-arena/compare/v0.1.0...v0.2.0) (2021-06-17)
+
+
+### Features
+
+* **docker:** ✨ adds engine pull/run on game created event using saga ([1ce615d](https://github.com/crissilvaeng/chess-arena/commit/1ce615d6b4d9d7fc378ff1c3ae9819cfff7df1d9))
+
+## [0.1.0](https://github.com/crissilvaeng/chess-arena/compare/v0.0.1...v0.1.0) (2021-06-17)
+
+
+### Features
+
+* **api:** :zap: adds a base game model to database ([b9ed62d](https://github.com/crissilvaeng/chess-arena/commit/b9ed62d426562d0b838e69eed402f73830b410e7))
+* **api:** 🎨 rewrite post function using cqrs module ([7691017](https://github.com/crissilvaeng/chess-arena/commit/769101784379fbf4fef00aa01e70a8144cf590c0))
+
 ### 0.0.1 (2021-06-17)
 
 
