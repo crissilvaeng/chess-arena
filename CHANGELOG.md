@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/crissilvaeng/chess-arena/compare/v0.2.0...v0.3.0) (2021-06-17)
+
+
+### Features
+
+* **auth:** 🛂 adds validation against static api key ([b0fec54](https://github.com/crissilvaeng/chess-arena/commit/b0fec547a39f4e656789d748ff3ea47ff18adfb3))
+
 ## [0.2.0](https://github.com/crissilvaeng/chess-arena/compare/v0.1.0...v0.2.0) (2021-06-17)
 
 

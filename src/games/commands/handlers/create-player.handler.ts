@@ -7,10 +7,9 @@ import { DockerService } from 'src/docker/docker.service';
 export class CreatePlayerHandler
   implements ICommandHandler<CreatePlayerCommand>
 {
-  constructor(private readonly service: DockerService) {
-  }
+  constructor(private readonly service: DockerService) {}
 
   async execute(command: CreatePlayerCommand) {
-    this.service.run(command.image)
+    this.service.run(command.image);
   }
 }

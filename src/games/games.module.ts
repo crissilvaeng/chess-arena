@@ -1,9 +1,7 @@
 import { Game, GameSchema } from './schemas/game.schema';
 
 import { CqrsModule } from '@nestjs/cqrs';
-import {
-  CreateGameHandler,
-} from './commands/handlers/create-game.handler';
+import { CreateGameHandler } from './commands/handlers/create-game.handler';
 import { CreatePlayerHandler } from './commands/handlers/create-player.handler';
 import { DockerModule } from 'src/docker/docker.module';
 import { GameRepository } from './repository/game.repository';
