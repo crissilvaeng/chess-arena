@@ -11,8 +11,8 @@ import { Module } from '@nestjs/common';
       useValue: new Docker(),
     },
     DockerService,
-    DockerHealthIndicator
+    DockerHealthIndicator,
   ],
-  exports: [DockerHealthIndicator]
+  exports: [DockerHealthIndicator],
 })
 export class DockerModule {}

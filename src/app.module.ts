@@ -9,7 +9,7 @@ import { Module } from '@nestjs/common';
     DockerModule,
     ConfigModule.forRoot({
       isGlobal: true,
-    })
+    }),
   ],
   controllers: [],
   providers: [],

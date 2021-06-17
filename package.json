@@ -28,6 +28,8 @@
     "@nestjs/platform-express": "^7.6.15",
     "@nestjs/terminus": "^7.2.0",
     "@types/dockerode": "^3.2.3",
+    "amqp-connection-manager": "^3.2.2",
+    "amqplib": "^0.8.0",
     "dockerode": "^3.3.0",
     "nats": "^1.4.12",
     "redis": "^3.1.2",
