@@ -19,7 +19,9 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle(Case.title(process.env.npm_package_name))
-    .setDescription(`${process.env.npm_package_description} (rev: ${process.env.GIT_REV})`)
+    .setDescription(
+      `${process.env.npm_package_description} (rev: ${process.env.GIT_REV})`,
+    )
     .setVersion(process.env.npm_package_version)
     .build();
 
