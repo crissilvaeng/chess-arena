@@ -30,6 +30,7 @@ services:
     image: amir20/dozzle:latest
     environment:
       DOZZLE_NO_ANALYTICS: "true"
+      DOZZLE_FILTER: "label=yifan"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
