@@ -1,8 +1,19 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import { nanoid } from 'nanoid';
-
 export type GameDocument = Game & Document;
+
+@Schema()
+export class Player {
+  @Prop({
+    type: String,
+  })
+  image: string;
+
+  @Prop({
+    type: String,
+  })
+  container: string;
+}
 
 @Schema()
 export class Game {
@@ -12,16 +23,16 @@ export class Game {
   _id: string;
 
   @Prop({
-    type: String,
+    type: Player,
     required: true,
   })
-  white: string;
+  white: Player;
 
   @Prop({
-    type: String,
+    type: Player,
     required: true,
   })
-  black: string;
+  black: Player;
 }
 
 export const GameSchema = SchemaFactory.createForClass(Game);

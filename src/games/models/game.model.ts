@@ -1,5 +1,4 @@
 import { AggregateRoot } from '@nestjs/cqrs';
-import { GameCreatedEvent } from '../events/game-created.event';
 
 export class Game extends AggregateRoot {
   constructor(

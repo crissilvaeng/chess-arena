@@ -8,6 +8,7 @@ import { GameRepository } from './repository/game.repository';
 import { GameSagas } from './sagas/games.sagas';
 import { GamesController } from './games.controller';
 import { GamesService } from './games.service';
+import { GetGameQueryHandler } from './queries/handlers/get-game.handler';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
@@ -23,6 +24,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     GamesService,
     GameRepository,
     CreateGameHandler,
+    GetGameQueryHandler,
     CreatePlayerHandler,
   ],
 })

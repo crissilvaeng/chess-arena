@@ -46,10 +46,6 @@ export class DockerService {
           Env: options?.env,
         },
         (err, container) => {
-          if (err) {
-            reject(err);
-            return;
-          }
           container.start({}, (err, data) => {
             if (err) {
               reject(err);

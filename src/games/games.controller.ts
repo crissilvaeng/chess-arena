@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Param, Get } from '@nestjs/common';
 import { GamesService } from './games.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { nanoid } from 'nanoid';
@@ -16,5 +16,11 @@ export class GamesController {
     const gameId = nanoid();
     await this.gamesService.createGame(gameId, createGameDto);
     return { game: gameId };
+  }
+
+  @Get(':id')
+  @ApiSecurity('api_key', ['api_key'])
+  async findOne(@Param('id') id: string) {
+    return await this.gamesService.findGameById(id);
   }
 }

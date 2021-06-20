@@ -14,8 +14,8 @@ export class GameSagas {
       ofType(GameCreatedEvent),
       mergeMap((event) =>
         of(
-          new CreatePlayerCommand(event.gameId, event.whiteImage),
-          new CreatePlayerCommand(event.gameId, event.blackImage),
+          new CreatePlayerCommand(event.gameId, 'white', event.whiteImage),
+          new CreatePlayerCommand(event.gameId, 'black', event.blackImage),
         ),
       ),
     );
