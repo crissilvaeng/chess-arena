@@ -1,6 +1,6 @@
-import * as Docker from 'dockerode';
+import Dockerode, * as Docker from 'dockerode';
 
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 export interface RunOptions {
   command?: string[];
@@ -10,8 +10,6 @@ export interface RunOptions {
 
 @Injectable()
 export class DockerService {
-  private readonly logger = new Logger(DockerService.name);
-
   constructor(private readonly docker: Docker) {}
 
   async ping() {
@@ -21,10 +19,10 @@ export class DockerService {
   async pull(image: string) {
     return new Promise((resolve, reject) => {
       this.docker.pull(image, (err, stream) => {
-        this.docker.modem.followProgress(stream, onFinished);
         if (err) {
           return reject(err);
         }
+        this.docker.modem.followProgress(stream, onFinished);
         function onFinished(err, output) {
           if (err) {
             return reject(err);
@@ -35,14 +33,32 @@ export class DockerService {
     });
   }
 
-  async run(image, options?: RunOptions) {
+  async run(image, options?: RunOptions): Promise<Dockerode.Container> {
     await this.pull(image);
-    await this.docker
-      .run(image, options?.command, null, {
-        Env: options?.env,
-        Cmd: options?.command,
-        Labels: options?.labels,
-        HostConfig: { NetworkMode: 'host' },
-      })
+    return new Promise((resolve, reject) => {
+      this.docker.createContainer(
+        {
+          Image: image,
+          Tty: true,
+          Cmd: ['yarn', 'start:prod'],
+          Labels: options?.labels,
+          HostConfig: { NetworkMode: 'host' },
+          Env: options?.env,
+        },
+        (err, container) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          container.start({}, (err, data) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+            resolve(container);
+          });
+        },
+      );
+    });
   }
 }

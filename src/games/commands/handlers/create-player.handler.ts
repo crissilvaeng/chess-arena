@@ -14,11 +14,14 @@ export class CreatePlayerHandler
   ) {}
 
   async execute(command: CreatePlayerCommand) {
+    const player = command.image.replace(/[^a-zA-Z0-9]/, '-');
     await this.service.run(command.image, {
-      command: ['node', 'dist/main'],
+      command: ['yarn', 'prod:start'],
       env: [
-        `NATS_URL=${this.config.get('ENGINES_NATS_URL')}`,
-        `NATS_SUBJECT=games.*.${command.image.replace(/[^a-zA-Z0-9]/, '-')}`,
+        'RABBITMQ_URL=amqp://localhost:5672',
+        'EXCHANGE_NAME=games.exchange',
+        `QUEUE_NAME=player.${player}`,
+        `ROUTING_KEY=${player}`,
       ],
       labels: { yifan: 'player' },
     });
