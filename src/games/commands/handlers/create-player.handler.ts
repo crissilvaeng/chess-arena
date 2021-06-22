@@ -18,7 +18,7 @@ export class CreatePlayerHandler
   async execute(command: CreatePlayerCommand) {
     const { game: id, image, player } = command;
     const key = image.replace(/[^a-zA-Z0-9]/, '-');
-    const container = await this.service.createPlayer(id, player, key, image);
+    const container = await this.service.createPlayer(key, image);
     const game = this.publisher.mergeObjectContext(
       await this.repository.update(id, {
         [`${command.player}.container`]: container.id,

@@ -9,14 +9,14 @@ export class PlayerService {
     private readonly config: ConfigService,
   ) {}
 
-  async createPlayer(game: string, player: string, key: string, image: string) {
+  async createPlayer(key: string, image: string) {
     return await this.service.run(image, {
       command: ['yarn', 'prod:start'],
       env: [
         `RABBITMQ_URL=${this.config.get('AMQP_SERVICE')}`,
         `EXCHANGE_NAME=${this.config.get('EXCHANGE_NAME', 'games.exchange')}`,
-        `QUEUE_NAME=${game}.${player}.${key}`,
-        `ROUTING_KEY=${game}.${player}`,
+        `QUEUE_NAME=player.${key}`,
+        `ROUTING_KEY=${key}`,
       ],
       labels: { yifan: 'player' },
     });
