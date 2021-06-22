@@ -10,8 +10,8 @@ on:
       - main
 
 jobs:
-  build:
-    name: 🐳 apps:create
+  create:
+    name: 🐳 Provision
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
@@ -32,3 +32,32 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           apps:create ${{ github.event.repository.name }}
+  config:
+    name: ⚙️ Configuration
+    needs: create
+    runs-on: ubuntu-latest
+    steps:
+    - name: docker-option:add
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          docker-options:add ${{ github.event.repository.name }} deploy "-v /var/run/docker.sock:/var/run/docker.sock"
+    - name: config:set
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          config:set --no-restart ${{ github.event.repository.name }} NATS_URL=${{ secrets.NATS_SERVICE }}
+    - name: config:set
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          config:set --no-restart ${{ github.event.repository.name }} RABBITMQ_URL=${{ secrets.AMQP_SERVICE }}
