@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://github.com/yifan-ca/chess-arena/compare/v1.0.0...v1.0.1) (2021-06-22)
+
+
+### Features
+
+* 🔒️ removes auth from GET /api/games endpoint ([395155e](https://github.com/yifan-ca/chess-arena/commit/395155ef3d9d57e2af537de1c340dbdc5d54803f))
+
+
+### Bug Fixes
+
+* :bug: allow same engine playing diff games ([600d4f4](https://github.com/yifan-ca/chess-arena/commit/600d4f42375ff2be9ec62b7a767ba4d35edfe3e5))
+* 🚑️ remvove game id from players' queue name and routing key ([36b5652](https://github.com/yifan-ca/chess-arena/commit/36b56522603749ad9274ca2643ebce59b267c4dd))
+
 ## [1.0.0](https://github.com/yifan-ca/chess-arena/compare/v0.5.0...v1.0.0) (2021-06-22)
 
 
