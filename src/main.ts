@@ -10,6 +10,11 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
+  app.enableCors({
+    origin: '*',
+    allowedHeaders:
+      'Content-Type, Access-Control-Allow-Headers, Authorization',
+  });
 
   app.use(compression());
   app.use(helmet());
@@ -23,11 +28,7 @@ async function bootstrap() {
       `${process.env.npm_package_description} (rev: ${process.env.GIT_REV})`,
     )
     .setVersion(process.env.npm_package_version)
-    .addApiKey({
-      type: 'apiKey',
-      in: 'header',
-      name: 'api_key',
-    })
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
