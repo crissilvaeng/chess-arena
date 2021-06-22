@@ -15,4 +15,9 @@ export class Move {
     default: Color.White,
   })
   turn: string;
+
+  @Prop({
+    type: String,
+  })
+  position: string;
 }

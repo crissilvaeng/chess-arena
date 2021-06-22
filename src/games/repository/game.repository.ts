@@ -47,7 +47,7 @@ export class GameRepository {
     );
   }
 
-  async add(id: string, move: string) {
+  async add(id: string, move: object) {
     const game = await this.gameModel.findByIdAndUpdate(
       id,
       {

@@ -1,7 +1,9 @@
+import { Color, START_FEN } from 'src/games/constants';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Chess } from 'chess.js';
+import { ConfigService } from '@nestjs/config';
 import { GameRepository } from 'src/games/repository/game.repository';
 import { MovePlayedEvent } from 'src/games/events/move-played.event';
 import { PlayMoveCommand } from '../play-move.command';
@@ -13,6 +15,7 @@ export class PlayMoveHandler implements ICommandHandler<PlayMoveCommand> {
     private readonly repository: GameRepository,
     private readonly broker: AmqpConnection,
     private readonly publisher: EventPublisher,
+    private readonly config: ConfigService,
   ) {}
 
   async execute(command: PlayMoveCommand) {
@@ -22,19 +25,23 @@ export class PlayMoveHandler implements ICommandHandler<PlayMoveCommand> {
     const chess = new Chess();
     game.moves.map((move) => chess.move(move, { sloppy: true }));
     if (chess.game_over()) {
-      return;
+      return; // TODO: Add Game Over!
     }
-    const search = await this.broker.request<SearchResult>({
-      exchange: 'games.exchange',
+    const { bestmove } = await this.broker.request<SearchResult>({
+      exchange: this.config.get('EXCHANGE_NAME', 'games.exchange'),
       routingKey: game[command.player].replace(/[^a-zA-Z0-9]/, '-'),
       payload: {
-        position: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-        movetime: 500,
+        position: START_FEN,
+        movetime: this.config.get<number>('ENGINE_MOVETIME', 500),
         moves: game.moves,
       },
-      timeout: 50000,
+      timeout: this.config.get<number>('RESPONSE_TIMEOUT', 50000),
     });
-    await this.repository.add(game.id, search.bestmove);
-    // game.publish(new MovePlayedEvent(game.id, command.player, search.bestmove));
+    await this.repository.add(game.id, {
+      move: bestmove,
+      turn: command.player,
+      position: chess.fen()
+    });
+    game.publish(new MovePlayedEvent(game.id, bestmove, Color.White, chess.fen()));
   }
 }

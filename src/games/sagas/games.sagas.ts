@@ -41,6 +41,14 @@ export class GameSagas {
   };
 
   @Saga()
+  gameStarted = (events$: Observable<any>): Observable<ICommand> => {
+    return events$.pipe(
+      ofType(GameStartedEvent),
+      map((event) => new PlayMoveCommand(event.id, Color.White)),
+    );
+  };
+
+  @Saga()
   movePlayed = (events$: Observable<any>): Observable<ICommand> => {
     return events$.pipe(
       ofType(MovePlayedEvent),
@@ -76,6 +84,20 @@ export class GameSagas {
         (event) =>
           new PublishNotificationCommand(
             `games.${event.id}.game-started`,
+            event,
+          ),
+      ),
+    );
+  };
+
+  @Saga()
+  movePlayedNotify = (events$: Observable<any>): Observable<ICommand> => {
+    return events$.pipe(
+      ofType(MovePlayedEvent),
+      map(
+        (event) =>
+          new PublishNotificationCommand(
+            `games.${event.id}.move-played`,
             event,
           ),
       ),
