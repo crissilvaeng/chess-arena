@@ -4,10 +4,6 @@
       "quantity": 1
     }
   },
-  "env": {
-    "NODE_ENV": "production",
-    "PORT": "3000"
-  },
   "dokku": {
     "plugins": [
       "redis",
