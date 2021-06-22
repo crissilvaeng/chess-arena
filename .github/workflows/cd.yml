@@ -9,8 +9,12 @@ on:
     branches:
       - main
 
+env:
+  nats: yifan-messaging-nats
+  rabbitmq: yifan-broker-amqp
+
 jobs:
-  create:
+  provision:
     name: 🐳 Provision
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -32,9 +36,37 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           apps:create ${{ github.event.repository.name }}
+  nats:
+    name: 🔌 Network (NATS)
+    needs: provision
+    runs-on: ubuntu-latest
+    steps:
+    - name: nats:linked
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          nats:linked ${{ env.nats }} ${{ github.event.repository.name }}
+  rabbitmq:
+    name: 🔌 Network (RabbitMQ)
+    needs: provision
+    runs-on: ubuntu-latest
+    steps:
+    - name: rabbitmq:linked
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          rabbitmq:linked ${{ env.rabbitmq }} ${{ github.event.repository.name }}
   config:
     name: ⚙️ Configuration
-    needs: create
+    needs:
+      - nats
+      - rabbitmq
     runs-on: ubuntu-latest
     steps:
     - name: docker-option:add
@@ -52,26 +84,18 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          config:set --no-restart ${{ github.event.repository.name }} NATS_URL=${{ secrets.NATS_SERVICE }}
-    - name: config:set
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          config:set --no-restart ${{ github.event.repository.name }} RABBITMQ_URL=${{ secrets.AMQP_SERVICE }}
-  deploy:
-    name: 🚀 Deploy
-    needs: config
-    runs-on: ubuntu-latest
-    steps:
-      - name: git:checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: git:deploy
-        uses: dokku/github-action@master
-        with:
-          git_remote_url: 'ssh://${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}/${{ github.event.repository.name }}'
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          config:set --encoded --no-restart ${{ github.event.repository.name }} API_KEY=${{ secrets.API_KEY }}
+  # deploy:
+  #   name: 🚀 Deploy
+  #   needs: config
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: git:checkout
+  #       uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: git:push
+  #       uses: dokku/github-action@master
+  #       with:
+  #         git_remote_url: 'ssh://${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}/${{ github.event.repository.name }}'
+  #         ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
