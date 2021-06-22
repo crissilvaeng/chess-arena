@@ -38,10 +38,10 @@ export class PlayMoveHandler implements ICommandHandler<PlayMoveCommand> {
     }
     const { bestmove } = await this.broker.request<SearchResult>({
       exchange: this.config.get('EXCHANGE_NAME', 'games.exchange'),
-      routingKey: game[command.player].replace(/[^a-zA-Z0-9]/, '-'),
+      routingKey: `${game.id}.${command.player}`,
       payload: {
         position: START_FEN,
-        movetime: this.config.get<number>('ENGINE_MOVETIME', 500),
+        movetime: this.config.get<number>('ENGINE_MOVETIME', 5000),
         moves: game.moves,
       },
       timeout: this.config.get<number>('RESPONSE_TIMEOUT', 50000),
