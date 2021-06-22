@@ -61,3 +61,15 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           config:set --no-restart ${{ github.event.repository.name }} RABBITMQ_URL=${{ secrets.AMQP_SERVICE }}
+  deploy:
+    name: 🚀 Deploy
+    needs: config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: dokku/github-action@master
+        with:
+          git_remote_url: 'ssh://${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}/${{ github.event.repository.name }}'
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
