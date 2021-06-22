@@ -40,6 +40,7 @@ jobs:
     name: 🔌 Network (NATS)
     needs: provision
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
     - name: nats:linked
       uses: appleboy/ssh-action@master
@@ -49,10 +50,20 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           nats:linked ${{ env.nats }} ${{ github.event.repository.name }}
+    - name: nats:link
+      uses: appleboy/ssh-action@master
+      if: ${{ failure() }}
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          nats:link ${{ env.nats }} ${{ github.event.repository.name }}
   rabbitmq:
     name: 🔌 Network (RabbitMQ)
     needs: provision
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
     - name: rabbitmq:linked
       uses: appleboy/ssh-action@master
@@ -62,6 +73,15 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           rabbitmq:linked ${{ env.rabbitmq }} ${{ github.event.repository.name }}
+    - name: rabbitmq:link
+      uses: appleboy/ssh-action@master
+      if: ${{ failure() }}
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          rabbitmq:link ${{ env.rabbitmq }} ${{ github.event.repository.name }}
   config:
     name: ⚙️ Configuration
     needs:
