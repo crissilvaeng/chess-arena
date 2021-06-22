@@ -8,10 +8,10 @@ export class AuthGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest() as Request;
-    const apiKey = this.config.get<string>('API_KEY');
+    const apiKey = request.headers['api_key'];
     return (
-      Buffer.from(apiKey, 'base64').toString('utf-8') ==
-      request.headers['api_key']
+      this.config.get<string>('API_KEY') ==
+      Buffer.from(apiKey, 'base64').toString('utf-8') 
     );
   }
 }
