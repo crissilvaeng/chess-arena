@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/yifan-ca/chess-arena/compare/v0.4.0...v0.5.0) (2021-06-22)
+
+
+### Features
+
+* 💚 adds CHECKS file to Dokku deploy ([259c2bb](https://github.com/yifan-ca/chess-arena/commit/259c2bb62603e01521650a1682cd78248dac6a49))
+* 🚀 adds apps.json and Procfile to deploy in Dokku PAAS ([225d0eb](https://github.com/yifan-ca/chess-arena/commit/225d0eb904bf96c7df9c4c71972bc3e51fbc2d29))
+
 ## [0.4.0](https://github.com/crissilvaeng/chess-arena/compare/v0.3.0...v0.4.0) (2021-06-22)
 
 

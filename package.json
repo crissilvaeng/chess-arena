@@ -1,6 +1,6 @@
 {
   "name": "chess-arena",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Competition platform that enables the dispute between chess engines with Docker and UCI.",
   "author": "",
   "private": true,

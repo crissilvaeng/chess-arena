@@ -1,0 +1,61 @@
+---
+name: "Continuous Delivery"
+
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  config:
+    name: ⚙️ Configuration
+    runs-on: ubuntu-latest
+    steps:
+    - name: docker-option:add
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          docker-options:add ${{ github.event.repository.name }} deploy "-v /var/run/docker.sock:/var/run/docker.sock"
+    - name: config:set
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          config:set --encoded --no-restart ${{ github.event.repository.name }} API_KEY=${{ secrets.API_KEY }}
+
+  deploy:
+    name: 🚀 Deploy
+    needs: config
+    runs-on: ubuntu-latest
+    steps:
+      - name: git:checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: git:push
+        uses: dokku/github-action@master
+        with:
+          git_remote_url: 'ssh://${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}/${{ github.event.repository.name }}'
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+  ssl:
+    name: 🛡️ SSL (Let's Encrypt)
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: letsencrypt:auto-renew
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          letsencrypt:auto-renew ${{ github.event.repository.name }}

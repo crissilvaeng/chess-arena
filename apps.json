@@ -1,0 +1,8 @@
+{
+  "dokku": {
+    "plugins": [
+      "redis",
+      "mongo"
+    ]
+  }
+}
