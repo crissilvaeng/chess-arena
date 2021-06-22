@@ -20,7 +20,7 @@ export class PlayMoveHandler implements ICommandHandler<PlayMoveCommand> {
       await this.repository.findById(command.game),
     );
     const chess = new Chess();
-    game.moves.map(move => chess.move(move, { sloppy: true }));
+    game.moves.map((move) => chess.move(move, { sloppy: true }));
     if (chess.game_over()) {
       return;
     }
@@ -30,7 +30,7 @@ export class PlayMoveHandler implements ICommandHandler<PlayMoveCommand> {
       payload: {
         position: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
         movetime: 500,
-        moves: game.moves
+        moves: game.moves,
       },
       timeout: 50000,
     });

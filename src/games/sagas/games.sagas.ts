@@ -28,7 +28,13 @@ export class GameSagas {
   movePlayed = (events$: Observable<any>): Observable<ICommand> => {
     return events$.pipe(
       ofType(MovePlayedEvent),
-      map((event) => new PlayMoveCommand(event.game, event.player === 'white'? 'black' : 'white'),),
+      map(
+        (event) =>
+          new PlayMoveCommand(
+            event.game,
+            event.player === 'white' ? 'black' : 'white',
+          ),
+      ),
     );
   };
 }
