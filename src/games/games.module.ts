@@ -11,18 +11,31 @@ import { GamesService } from './games.service';
 import { GetGameQueryHandler } from './queries/handlers/get-game.handler';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { PlayMoveHandler } from './commands/handlers/play-move.handler';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 
 @Module({
   imports: [
     CqrsModule,
     DockerModule,
     MongooseModule.forFeature([{ name: Game.name, schema: GameSchema }]),
+    RabbitMQModule.forRoot(RabbitMQModule, {
+      exchanges: [
+        {
+          name: 'games.exchange',
+          type: 'direct',
+        },
+      ],
+      uri: 'amqp://localhost:5672',
+      connectionInitOptions: { wait: false },
+    }),
   ],
   controllers: [GamesController],
   providers: [
     GameSagas,
     GamesService,
     GameRepository,
+    PlayMoveHandler,
     CreateGameHandler,
     GetGameQueryHandler,
     CreatePlayerHandler,

@@ -28,7 +28,7 @@ export class CreatePlayerHandler
       labels: { yifan: 'player' },
     });
     this.repository.update(command.game, {
-      [`${command.player}.container`]: container.id
-    })
+      [`${command.player}.container`]: container.id,
+    });
   }
 }

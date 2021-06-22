@@ -33,6 +33,11 @@ export class Game {
     required: true,
   })
   black: Player;
+
+  @Prop({
+    type: [{ type: String }],
+  })
+  moves: string[];
 }
 
 export const GameSchema = SchemaFactory.createForClass(Game);
