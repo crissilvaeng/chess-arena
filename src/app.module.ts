@@ -16,6 +16,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       useFactory: async (config: ConfigService) => ({
         uri: config.get('MONGO_URL'),
         useCreateIndex: true,
+        useFindAndModify: false,
       }),
       inject: [ConfigService],
     }),

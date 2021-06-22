@@ -1,5 +1,5 @@
-type Color = 'white' | 'black';
+import { Color } from '../constants';
 
 export class PlayMoveCommand {
-  constructor(public readonly game: string, public readonly turn: Color) {}
+  constructor(public readonly game: string, public readonly player: Color) {}
 }

@@ -16,23 +16,51 @@ export class GameRepository {
       white: { image: white },
       black: { image: black },
     });
-    return new Game(game.id, game.white.image, game.black.image);
+    return new Game(game.id, game.white.image, game.status, game.black.image);
   }
 
   async findById(id: string) {
     const game = await this.gameModel.findById(id);
-    return new Game(game.id, game.white.image, game.black.image, game.moves);
+    return new Game(
+      game.id,
+      game.white.image,
+      game.black.image,
+      game.status,
+      game.moves.map((move) => move.move),
+    );
   }
 
-  async update(gameId: string, game: object) {
-    return this.gameModel.findByIdAndUpdate(gameId, {
-      $set: game,
-    });
+  async update(id: string, update: object) {
+    const game = await this.gameModel.findByIdAndUpdate(
+      id,
+      {
+        $set: update,
+      },
+      { new: true },
+    );
+    return new Game(
+      game.id,
+      game.white.image,
+      game.black.image,
+      game.status,
+      game.moves.map((move) => move.move),
+    );
   }
 
-  async add(gameId: string, move: string) {
-    return this.gameModel.findByIdAndUpdate(gameId, {
-      $push: { moves: move },
-    });
+  async add(id: string, move: string) {
+    const game = await this.gameModel.findByIdAndUpdate(
+      id,
+      {
+        $push: { moves: move },
+      },
+      { new: true },
+    );
+    return new Game(
+      game.id,
+      game.white.image,
+      game.black.image,
+      game.status,
+      game.moves.map((move) => move.move),
+    );
   }
 }

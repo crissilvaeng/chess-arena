@@ -1,9 +1,10 @@
 import { Color } from '../constants';
 
-export class CreatePlayerCommand {
+export class PlayerCreatedEvent {
   constructor(
-    public readonly game: string,
+    public readonly id: string,
     public readonly player: Color,
     public readonly image: string,
+    public readonly container: string,
   ) {}
 }

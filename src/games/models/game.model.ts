@@ -5,6 +5,7 @@ export class Game extends AggregateRoot {
     public readonly id: string,
     public readonly white: string,
     public readonly black: string,
+    public readonly status: string,
     public readonly moves?: string[],
   ) {
     super();

@@ -12,8 +12,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   app.enableCors({
     origin: '*',
-    allowedHeaders:
-      'Content-Type, Access-Control-Allow-Headers, Authorization',
+    allowedHeaders: 'Content-Type, Access-Control-Allow-Headers, Authorization',
   });
 
   app.use(compression());

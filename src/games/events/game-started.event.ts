@@ -1,4 +1,4 @@
-export class GameCreatedEvent {
+export class GameStartedEvent {
   constructor(
     public readonly id: string,
     public readonly white: string,

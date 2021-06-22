@@ -12,9 +12,9 @@ export class AuthGuard implements CanActivate {
       const token = request.headers['authorization'].split('Bearer ')[1];
       return (
         this.config.get<string>('API_KEY') ===
-        Buffer.from(token, 'base64').toString('utf-8') 
+        Buffer.from(token, 'base64').toString('utf-8')
       );
-    } catch(err) {
+    } catch (err) {
       return false;
     }
   }

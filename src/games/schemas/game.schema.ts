@@ -1,18 +1,16 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
+import { Move } from './move.schema';
+import { Outcome } from './outcome.schema';
+import { Player } from './player.schema';
+
 export type GameDocument = Game & Document;
 
-@Schema()
-export class Player {
-  @Prop({
-    type: String,
-  })
-  image: string;
-
-  @Prop({
-    type: String,
-  })
-  container: string;
+export enum GameStatus {
+  Pending = 'Pending',
+  Running = 'Running',
+  Closed = 'Closed',
+  Error = 'Error',
 }
 
 @Schema()
@@ -23,21 +21,33 @@ export class Game {
   _id: string;
 
   @Prop({
-    type: Player,
+    type: Object,
     required: true,
   })
   white: Player;
 
   @Prop({
-    type: Player,
+    type: Object,
     required: true,
   })
   black: Player;
 
   @Prop({
-    type: [{ type: String }],
+    type: String,
+    enum: Object.keys(GameStatus),
+    default: GameStatus.Pending,
   })
-  moves: string[];
+  status: string;
+
+  @Prop({
+    type: [{ type: Object }],
+  })
+  moves: Move[];
+
+  @Prop({
+    type: Object,
+  })
+  outcome: Outcome;
 }
 
 export const GameSchema = SchemaFactory.createForClass(Game);

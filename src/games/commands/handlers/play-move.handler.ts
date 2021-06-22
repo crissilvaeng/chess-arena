@@ -26,7 +26,7 @@ export class PlayMoveHandler implements ICommandHandler<PlayMoveCommand> {
     }
     const search = await this.broker.request<SearchResult>({
       exchange: 'games.exchange',
-      routingKey: game[command.turn].replace(/[^a-zA-Z0-9]/, '-'),
+      routingKey: game[command.player].replace(/[^a-zA-Z0-9]/, '-'),
       payload: {
         position: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
         movetime: 500,
@@ -35,6 +35,6 @@ export class PlayMoveHandler implements ICommandHandler<PlayMoveCommand> {
       timeout: 50000,
     });
     await this.repository.add(game.id, search.bestmove);
-    game.publish(new MovePlayedEvent(game.id, command.turn, search.bestmove));
+    // game.publish(new MovePlayedEvent(game.id, command.player, search.bestmove));
   }
 }
