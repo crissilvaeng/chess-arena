@@ -1,4 +1,5 @@
 import { AggregateRoot } from '@nestjs/cqrs';
+import { Outcome } from '../schemas/outcome.schema';
 
 export class Game extends AggregateRoot {
   constructor(
@@ -7,6 +8,7 @@ export class Game extends AggregateRoot {
     public readonly black: string,
     public readonly status: string,
     public readonly moves?: string[],
+    public readonly outcome?: Outcome,
   ) {
     super();
   }

@@ -1,9 +1,15 @@
 import { Color, START_FEN } from 'src/games/constants';
-import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+import {
+  CommandBus,
+  CommandHandler,
+  EventPublisher,
+  ICommandHandler,
+} from '@nestjs/cqrs';
 
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Chess } from 'chess.js';
 import { ConfigService } from '@nestjs/config';
+import { FinishGameCommand } from '../finish-game.command';
 import { GameRepository } from 'src/games/repository/game.repository';
 import { MovePlayedEvent } from 'src/games/events/move-played.event';
 import { PlayMoveCommand } from '../play-move.command';
@@ -16,6 +22,7 @@ export class PlayMoveHandler implements ICommandHandler<PlayMoveCommand> {
     private readonly broker: AmqpConnection,
     private readonly publisher: EventPublisher,
     private readonly config: ConfigService,
+    private readonly commandBus: CommandBus,
   ) {}
 
   async execute(command: PlayMoveCommand) {
@@ -25,7 +32,9 @@ export class PlayMoveHandler implements ICommandHandler<PlayMoveCommand> {
     const chess = new Chess();
     game.moves.map((move) => chess.move(move, { sloppy: true }));
     if (chess.game_over()) {
-      return; // TODO: Add Game Over!
+      return this.commandBus.execute(
+        new FinishGameCommand(game.id, chess.moves()),
+      );
     }
     const { bestmove } = await this.broker.request<SearchResult>({
       exchange: this.config.get('EXCHANGE_NAME', 'games.exchange'),
@@ -40,8 +49,10 @@ export class PlayMoveHandler implements ICommandHandler<PlayMoveCommand> {
     await this.repository.add(game.id, {
       move: bestmove,
       turn: command.player,
-      position: chess.fen()
+      position: chess.fen(),
     });
-    game.publish(new MovePlayedEvent(game.id, bestmove, Color.White, chess.fen()));
+    game.publish(
+      new MovePlayedEvent(game.id, bestmove, Color.White, chess.fen()),
+    );
   }
 }

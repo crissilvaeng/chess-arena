@@ -6,6 +6,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { CreateGameHandler } from './commands/handlers/create-game.handler';
 import { CreatePlayerHandler } from './commands/handlers/create-player.handler';
 import { DockerModule } from 'src/docker/docker.module';
+import { FinishGamneHandler } from './commands/handlers/finish-game.handler';
 import { GameRepository } from './repository/game.repository';
 import { GameSagas } from './sagas/games.sagas';
 import { GamesController } from './games.controller';
@@ -62,6 +63,7 @@ import { StartGamneHandler } from './commands/handlers/start-game.handler';
     PlayMoveHandler,
     CreateGameHandler,
     StartGamneHandler,
+    FinishGamneHandler,
     GetGameQueryHandler,
     CreatePlayerHandler,
     PublishNotificationHandler,

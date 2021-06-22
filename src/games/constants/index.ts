@@ -19,4 +19,11 @@ export enum Result {
   Black = '0-1',
 }
 
-export const START_FEN: string = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+export interface Outcome {
+  termination: Termination;
+  winner?: Color;
+  result: string;
+}
+
+export const START_FEN: string =
+  'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Color } from '../constants';
 import { Game } from '../models/game.model';
 import { Game as GameSchema, GameDocument } from '../schemas/game.schema';
 
@@ -13,8 +14,8 @@ export class GameRepository {
   async create(id: string, white: string, black: string) {
     const game = await this.gameModel.create({
       _id: id,
-      white: { image: white },
-      black: { image: black },
+      white: { color: Color.White, image: white },
+      black: { color: Color.Black, image: black },
     });
     return new Game(game.id, game.white.image, game.status, game.black.image);
   }
@@ -27,6 +28,7 @@ export class GameRepository {
       game.black.image,
       game.status,
       game.moves.map((move) => move.move),
+      game.outcome,
     );
   }
 
@@ -44,6 +46,7 @@ export class GameRepository {
       game.black.image,
       game.status,
       game.moves.map((move) => move.move),
+      game.outcome,
     );
   }
 
@@ -61,6 +64,7 @@ export class GameRepository {
       game.black.image,
       game.status,
       game.moves.map((move) => move.move),
+      game.outcome,
     );
   }
 }
