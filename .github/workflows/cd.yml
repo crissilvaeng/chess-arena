@@ -4,14 +4,11 @@ name: "Continuous Delivery"
 on:
   push:
     branches:
-      - "*"
-  pull_request:
-    branches:
       - main
 
 jobs:
   config:
-    name: ⚙️ Configuration
+    name: 🐳 Configuration
     runs-on: ubuntu-latest
     steps:
     - name: docker-option:add
@@ -30,6 +27,14 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           config:set --encoded --no-restart ${{ github.event.repository.name }} API_KEY=${{ secrets.API_KEY }}
+    - name: config:set
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          config:set --no-restart ${{ github.event.repository.name }} AMQP_SERVICE=${{ secrets.AMQP_SERVICE }}
 
   deploy:
     name: 🚀 Deploy

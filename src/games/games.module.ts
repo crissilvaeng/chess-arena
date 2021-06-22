@@ -26,8 +26,8 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
       useFactory: async (config: ConfigService) => ({
         exchanges: [
           {
-            name: 'games.exchange',
-            type: 'direct',
+            name: config.get('EXCHANGE_NAME', 'games.exchange'),
+            type: config.get('EXCHANGE_TYPE', 'direct'),
           },
         ],
         uri: config.get('RABBITMQ_URL'),

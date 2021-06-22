@@ -20,8 +20,8 @@ export class CreatePlayerHandler
     const container = await this.service.run(command.image, {
       command: ['yarn', 'prod:start'],
       env: [
-        'RABBITMQ_URL=amqp://localhost:5672',
-        'EXCHANGE_NAME=games.exchange',
+        `RABBITMQ_URL=${this.config.get('AMQP_SERVICE')}`,
+        `EXCHANGE_NAME=${this.config.get('EXCHANGE_NAME', 'games.exchange')}`,
         `QUEUE_NAME=player.${player}`,
         `ROUTING_KEY=${player}`,
       ],
