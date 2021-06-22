@@ -1,3 +1,4 @@
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Game, GameSchema } from './schemas/game.schema';
 
 import { CqrsModule } from '@nestjs/cqrs';
@@ -18,16 +19,21 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
   imports: [
     CqrsModule,
     DockerModule,
+    ConfigModule,
     MongooseModule.forFeature([{ name: Game.name, schema: GameSchema }]),
-    RabbitMQModule.forRoot(RabbitMQModule, {
-      exchanges: [
-        {
-          name: 'games.exchange',
-          type: 'direct',
-        },
-      ],
-      uri: 'amqp://localhost:5672',
-      connectionInitOptions: { wait: false },
+    RabbitMQModule.forRootAsync(RabbitMQModule, {
+      imports: [ConfigModule],
+      useFactory: async (config: ConfigService) => ({
+        exchanges: [
+          {
+            name: 'games.exchange',
+            type: 'direct',
+          },
+        ],
+        uri: config.get('RABBITMQ_URL'),
+        connectionInitOptions: { wait: false },
+      }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [GamesController],

@@ -9,105 +9,31 @@ on:
     branches:
       - main
 
-env:
-  nats: yifan-messaging-nats
-  rabbitmq: yifan-broker-amqp
-
 jobs:
-  # provision:
-  #   name: 🐳 Provision
-  #   runs-on: ubuntu-latest
-  #   continue-on-error: true
-  #   steps:
-  #   - name: apps:exists
-  #     uses: appleboy/ssh-action@master
-  #     with:
-  #       host: ${{ secrets.SSH_HOST }}
-  #       username: ${{ secrets.SSH_USERNAME }}
-  #       key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #       script: |
-  #         apps:exists ${{ github.event.repository.name }}
-  #   - name: apps:create
-  #     if: ${{ failure() }}
-  #     uses: appleboy/ssh-action@master
-  #     with:
-  #       host: ${{ secrets.SSH_HOST }}
-  #       username: ${{ secrets.SSH_USERNAME }}
-  #       key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #       script: |
-  #         apps:create ${{ github.event.repository.name }}
-  # nats:
-  #   name: 💬 Network (NATS)
-  #   needs: provision
-  #   runs-on: ubuntu-latest
-  #   continue-on-error: true
-  #   steps:
-  #   - name: nats:linked
-  #     uses: appleboy/ssh-action@master
-  #     with:
-  #       host: ${{ secrets.SSH_HOST }}
-  #       username: ${{ secrets.SSH_USERNAME }}
-  #       key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #       script: |
-  #         nats:linked ${{ env.nats }} ${{ github.event.repository.name }}
-  #   - name: nats:link
-  #     uses: appleboy/ssh-action@master
-  #     if: ${{ failure() }}
-  #     with:
-  #       host: ${{ secrets.SSH_HOST }}
-  #       username: ${{ secrets.SSH_USERNAME }}
-  #       key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #       script: |
-  #         nats:link ${{ env.nats }} ${{ github.event.repository.name }}
-  # rabbitmq:
-  #   name: 🐰 Network (RabbitMQ)
-  #   needs: provision
-  #   runs-on: ubuntu-latest
-  #   continue-on-error: true
-  #   steps:
-  #   - name: rabbitmq:linked
-  #     uses: appleboy/ssh-action@master
-  #     with:
-  #       host: ${{ secrets.SSH_HOST }}
-  #       username: ${{ secrets.SSH_USERNAME }}
-  #       key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #       script: |
-  #         rabbitmq:linked ${{ env.rabbitmq }} ${{ github.event.repository.name }}
-  #   - name: rabbitmq:link
-  #     uses: appleboy/ssh-action@master
-  #     if: ${{ failure() }}
-  #     with:
-  #       host: ${{ secrets.SSH_HOST }}
-  #       username: ${{ secrets.SSH_USERNAME }}
-  #       key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #       script: |
-  #         rabbitmq:link ${{ env.rabbitmq }} ${{ github.event.repository.name }}
-  # configuration:
-  #   name: ⚙️ Configuration
-  #   needs:
-  #     - nats
-  #     - rabbitmq
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: docker-option:add
-  #     uses: appleboy/ssh-action@master
-  #     with:
-  #       host: ${{ secrets.SSH_HOST }}
-  #       username: ${{ secrets.SSH_USERNAME }}
-  #       key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #       script: |
-  #         docker-options:add ${{ github.event.repository.name }} deploy "-v /var/run/docker.sock:/var/run/docker.sock"
-  #   - name: config:set
-  #     uses: appleboy/ssh-action@master
-  #     with:
-  #       host: ${{ secrets.SSH_HOST }}
-  #       username: ${{ secrets.SSH_USERNAME }}
-  #       key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #       script: |
-  #         config:set --encoded --no-restart ${{ github.event.repository.name }} API_KEY=${{ secrets.API_KEY }}
+  config:
+    name: ⚙️ Configuration
+    runs-on: ubuntu-latest
+    steps:
+    - name: docker-option:add
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          docker-options:add ${{ github.event.repository.name }} deploy "-v /var/run/docker.sock:/var/run/docker.sock"
+    - name: config:set
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          config:set --encoded --no-restart ${{ github.event.repository.name }} API_KEY=${{ secrets.API_KEY }}
+
   deploy:
     name: 🚀 Deploy
-    # needs: configuration
+    needs: config
     runs-on: ubuntu-latest
     steps:
       - name: git:checkout
@@ -119,16 +45,17 @@ jobs:
         with:
           git_remote_url: 'ssh://${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}/${{ github.event.repository.name }}'
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-  # ssl:
-  #   name: 🛡️ SSL (Let's Encrypt)
-  #   needs: deploy
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: letsencrypt:auto-renew
-  #     uses: appleboy/ssh-action@master
-  #     with:
-  #       host: ${{ secrets.SSH_HOST }}
-  #       username: ${{ secrets.SSH_USERNAME }}
-  #       key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #       script: |
-  #         letsencrypt:enable ${{ github.event.repository.name }}
+
+  ssl:
+    name: 🛡️ SSL (Let's Encrypt)
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: letsencrypt:auto-renew
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          letsencrypt:auto-renew ${{ github.event.repository.name }}
