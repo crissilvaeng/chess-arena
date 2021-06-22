@@ -46,6 +46,7 @@ export class PlayMoveHandler implements ICommandHandler<PlayMoveCommand> {
       },
       timeout: this.config.get<number>('RESPONSE_TIMEOUT', 50000),
     });
+    chess.move(bestmove, { sloppy: true })
     await this.repository.add(game.id, {
       move: bestmove,
       turn: command.player,
