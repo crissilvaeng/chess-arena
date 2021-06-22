@@ -82,7 +82,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           rabbitmq:link ${{ env.rabbitmq }} ${{ github.event.repository.name }}
-  config:
+  configuration:
     name: ⚙️ Configuration
     needs:
       - nats
@@ -107,7 +107,7 @@ jobs:
           config:set --encoded --no-restart ${{ github.event.repository.name }} API_KEY=${{ secrets.API_KEY }}
   deploy:
     name: 🚀 Deploy
-    needs: config
+    needs: configuration
     runs-on: ubuntu-latest
     steps:
       - name: git:checkout
@@ -119,3 +119,16 @@ jobs:
         with:
           git_remote_url: 'ssh://${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}/${{ github.event.repository.name }}'
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+  ssl:
+    name: 🛡️ SSL (Let's Encrypt)
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: letsencrypt:auto-renew
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          letsencrypt:enable ${{ github.event.repository.name }}
