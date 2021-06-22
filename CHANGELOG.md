@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/crissilvaeng/chess-arena/compare/v0.3.0...v0.4.0) (2021-06-22)
+
+
+### Features
+
+* :sparkles: changes moves between players using rabbit ([e4fb988](https://github.com/crissilvaeng/chess-arena/commit/e4fb9882bcb809d42db5dc7c7dde041e7a150602))
+* **player:** :sparkles: save container id to post use ([2380d92](https://github.com/crissilvaeng/chess-arena/commit/2380d9262f3bc49605c3d72224782ebb9b1d68c7))
+
+
+### Bug Fixes
+
+* :bug: enable start container in a dettach mode ([ddccbb1](https://github.com/crissilvaeng/chess-arena/commit/ddccbb1fbc3e55197d14ed174e91237cf2531289))
+* **docker:** 🐛 await util pull is complete before run engine ([de82ed2](https://github.com/crissilvaeng/chess-arena/commit/de82ed27ff42a20c6c9ad3bd68a305ef7eeaaa9a))
+
 ## [0.3.0](https://github.com/crissilvaeng/chess-arena/compare/v0.2.0...v0.3.0) (2021-06-17)
 
 

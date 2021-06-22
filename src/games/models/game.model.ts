@@ -1,11 +1,11 @@
 import { AggregateRoot } from '@nestjs/cqrs';
-import { GameCreatedEvent } from '../events/game-created.event';
 
 export class Game extends AggregateRoot {
   constructor(
-    private readonly id: string,
-    private readonly white: string,
-    private readonly black: string,
+    public readonly id: string,
+    public readonly white: string,
+    public readonly black: string,
+    public readonly moves?: string[],
   ) {
     super();
   }

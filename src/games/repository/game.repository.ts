@@ -11,7 +11,28 @@ export class GameRepository {
   ) {}
 
   async create(id: string, white: string, black: string) {
-    const game = await this.gameModel.create({ _id: id, white, black });
-    return new Game(game.id, game.white, game.black);
+    const game = await this.gameModel.create({
+      _id: id,
+      white: { image: white },
+      black: { image: black },
+    });
+    return new Game(game.id, game.white.image, game.black.image);
+  }
+
+  async findById(id: string) {
+    const game = await this.gameModel.findById(id);
+    return new Game(game.id, game.white.image, game.black.image, game.moves);
+  }
+
+  async update(gameId: string, game: object) {
+    return this.gameModel.findByIdAndUpdate(gameId, {
+      $set: game,
+    });
+  }
+
+  async add(gameId: string, move: string) {
+    return this.gameModel.findByIdAndUpdate(gameId, {
+      $push: { moves: move },
+    });
   }
 }
