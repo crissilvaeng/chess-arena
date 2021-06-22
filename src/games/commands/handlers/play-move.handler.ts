@@ -52,7 +52,7 @@ export class PlayMoveHandler implements ICommandHandler<PlayMoveCommand> {
       position: chess.fen(),
     });
     game.publish(
-      new MovePlayedEvent(game.id, bestmove, Color.White, chess.fen()),
+      new MovePlayedEvent(game.id, bestmove, command.player, chess.fen()),
     );
   }
 }

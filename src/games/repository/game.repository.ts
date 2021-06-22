@@ -29,6 +29,7 @@ export class GameRepository {
       game.status,
       game.moves.map((move) => move.move),
       game.outcome,
+      { 'white': game.white.container, 'black': game.black.container, }
     );
   }
 
@@ -47,6 +48,7 @@ export class GameRepository {
       game.status,
       game.moves.map((move) => move.move),
       game.outcome,
+      { 'white': game.white.container, 'black': game.black.container, }
     );
   }
 
@@ -65,6 +67,7 @@ export class GameRepository {
       game.status,
       game.moves.map((move) => move.move),
       game.outcome,
+      { 'white': game.white.container, 'black': game.black.container, }
     );
   }
 }

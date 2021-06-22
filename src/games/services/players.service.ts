@@ -21,4 +21,8 @@ export class PlayerService {
       labels: { yifan: 'player' },
     });
   }
+
+  async destroyPlayer(container: string) {
+    return await this.service.kill(container);
+  }
 }

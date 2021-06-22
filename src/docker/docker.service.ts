@@ -57,4 +57,8 @@ export class DockerService {
       );
     });
   }
+
+  async kill(container: string) {
+    return this.docker.getContainer(container).kill();
+  }
 }
