@@ -37,7 +37,7 @@ jobs:
         script: |
           apps:create ${{ github.event.repository.name }}
   nats:
-    name: 🔌 Network (NATS)
+    name: 💬 Network (NATS)
     needs: provision
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -60,7 +60,7 @@ jobs:
         script: |
           nats:link ${{ env.nats }} ${{ github.event.repository.name }}
   rabbitmq:
-    name: 🔌 Network (RabbitMQ)
+    name: 🐰 Network (RabbitMQ)
     needs: provision
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -105,17 +105,17 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           config:set --encoded --no-restart ${{ github.event.repository.name }} API_KEY=${{ secrets.API_KEY }}
-  # deploy:
-  #   name: 🚀 Deploy
-  #   needs: config
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: git:checkout
-  #       uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-  #     - name: git:push
-  #       uses: dokku/github-action@master
-  #       with:
-  #         git_remote_url: 'ssh://${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}/${{ github.event.repository.name }}'
-  #         ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+  deploy:
+    name: 🚀 Deploy
+    needs: config
+    runs-on: ubuntu-latest
+    steps:
+      - name: git:checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: git:push
+        uses: dokku/github-action@master
+        with:
+          git_remote_url: 'ssh://${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}/${{ github.event.repository.name }}'
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
