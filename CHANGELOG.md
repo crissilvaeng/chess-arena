@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/yifan-ca/chess-arena/compare/v0.5.0...v1.0.0) (2021-06-22)
+
+
+### Features
+
+* ♻️ publish events in NATS ([d4a8fa6](https://github.com/yifan-ca/chess-arena/commit/d4a8fa65e5fc2b9319fdf8e41d222078f9a00e8b))
+* ✨ adds outcome like py chess when game finish ([b754750](https://github.com/yifan-ca/chess-arena/commit/b754750aba2f4b320433654332e1b5db25cbd783))
+* ✨ destroy containers after game over ([b1d5fc8](https://github.com/yifan-ca/chess-arena/commit/b1d5fc826c045e7cbfbaad073d43b840bb5654bd))
+* ✨ engines competion vi rabbitmq (with settings) ([debc5b2](https://github.com/yifan-ca/chess-arena/commit/debc5b257d2485c54eea6b4600715b4079bb7198))
+
+
+### Bug Fixes
+
+* :lock: enable Authorization header in CORS configs + auth bearer ([3aab989](https://github.com/yifan-ca/chess-arena/commit/3aab989f90330dd8ee6fb6e8877ed6ef81ffa35f))
+* 🔒️ decode header form base64 instead envvar ([2535092](https://github.com/yifan-ca/chess-arena/commit/25350923a818d4369e9a07febcf60b2f1189e2b7))
+* 🔧 adds AMQP_SERVICE to CD workflow ([d158d35](https://github.com/yifan-ca/chess-arena/commit/d158d35cd56067fa18edfcf9c2bce6ef167b7cdc))
+
 ## [0.5.0](https://github.com/yifan-ca/chess-arena/compare/v0.4.0...v0.5.0) (2021-06-22)
 
 
