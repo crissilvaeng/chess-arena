@@ -41,7 +41,7 @@ export class PlayMoveHandler implements ICommandHandler<PlayMoveCommand> {
       routingKey: game[command.player].replace(/[^a-zA-Z0-9]/, '-'),
       payload: {
         position: START_FEN,
-        movetime: this.config.get<number>('ENGINE_MOVETIME', 5000),
+        movetime: this.config.get<number>('ENGINE_MOVETIME', 500),
         moves: game.moves,
       },
       timeout: this.config.get<number>('RESPONSE_TIMEOUT', 50000),
